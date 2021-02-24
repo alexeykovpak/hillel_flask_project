@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask applicaton for homework #2: names & emails</title>
+</head>
+<body>
+    <h1>There is a list of {{ user_count }} users' names and emails:</h1>
+    <ul>
+        {% for line in data %}
+            {% if line %}
+                <li>{{ line }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</body>
+</html>
