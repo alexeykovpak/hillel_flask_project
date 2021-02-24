@@ -21,14 +21,14 @@ def re_py_pa():
 
 
 @app.route('/generate-users/')
-def gen_usrs(user_count=100):
+def gen_usrs():
     # Generates random first names and e-mail addresses in the quantity that equals ti 'user_count' parameter
 
     from faker import Faker
 
     fake = Faker()
     data = []
-    user_count = int(request.args.get('user_count', user_count))
+    user_count = int(request.args.get('user_count', '100'))
     names = [fake.unique.first_name() for _ in range(user_count)]
     for _ in range(user_count):
         text = fake.text().split(' ')[0]
