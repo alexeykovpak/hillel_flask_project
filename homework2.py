@@ -22,7 +22,7 @@ def re_py_pa():
 
 @app.route('/generate-users/')
 def gen_usrs():
-    # Generates random first names and e-mail addresses in the quantity that equals ti 'user_count' parameter
+    # Generates random first names and e-mail addresses in the quantity that equals to 'user_count' parameter
 
     from faker import Faker
 
