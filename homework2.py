@@ -44,5 +44,22 @@ def gen_usrs():
     )
 
 
+@app.route('/space/')
+def astros():
+    # Shows the number of astronauts that are currently in space
+
+    import requests
+
+    r = requests.get('http://api.open-notify.org/astros.json')
+    number = r.json()['number']
+    return render_template(
+        'template2.html',
+        **{
+            'query': request.values,
+            'number': number,
+        }
+    )
+
+
 if __name__ == '__main__':
     app.run()
