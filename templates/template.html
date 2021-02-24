@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask applicaton for homework #2</title>
+</head>
+<body>
+    <h1>These Python3 packages are already installed on my PC:</h1>
+    <ul>
+        {% for line in data %}
+	    {% if line %}
+		<li style='color: green;'>{{ line }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</body>
+</html>
