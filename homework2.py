@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -24,15 +25,13 @@ def re_py_pa():
 def gen_usrs():
     # Generates random first names and e-mail addresses in the quantity that equals to 'user_count' parameter
 
+
     from faker import Faker
 
     fake = Faker()
-    data = []
     user_count = int(request.args.get('user_count', '100'))
-    names = [fake.unique.first_name() for _ in range(user_count)]
-    for _ in range(user_count):
-        text = fake.text().split(' ')[0]
-        data.append(str(names[_]) + ' ' + str.lower(text) + '@mail.com')
+    data = ['{} {}'.format(fake.unique.first_name(), fake.email()) for _ in range(user_count)]
+    # I use Python 3.5 so I cannot use f-strings
 
     return render_template(
         'template1.html',
@@ -50,15 +49,23 @@ def astros():
 
     import requests
 
-    r = requests.get('http://api.open-notify.org/astros.json')
-    number = r.json()['number']
-    return render_template(
-        'template2.html',
-        **{
-            'query': request.values,
-            'number': number,
-        }
-    )
+    req = requests.get('http://api.open-notify.org/astros.json')
+    if req.status_code == 200:
+        number = req.json()['number']
+        return render_template(
+            'template2.html',
+            **{
+                'query': request.values,
+                'number': number,
+            }
+        )
+    else:
+        return render_template(
+            'template3.html',
+	    **{
+		'query': request.values,
+	    }
+        )
 
 
 if __name__ == '__main__':
