@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The list of books in our library, all or selected by author (or by genre) ID</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <tr>
+                        <th>Book #</th>
+                        <th>Book title</th>
+                        <th>Author's name</th>
+                        <th>Genre name</th>
+                        <th>Year of publishing</th>
+                        <th></th>
+                    </tr>
+                    {% for book in books %}
+                    <tr>
+                        <th>{{ book[0] }}</th>
+                        <th>{{ book[1] }}</th>
+                        <th>
+                            {% with author=get_by_id('Author', book[2]) %}
+                                {{ author[1] }}
+                            {% endwith %}
+                        </th>
+                        <th>
+                             {% with genre=get_by_id('Genre', book[3] )%}
+                                 {{ genre[1] }}
+                             {% endwith %}
+                        </th>
+                        <th>{{ book[4] }}</th>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
