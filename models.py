@@ -3,17 +3,17 @@ from peewee import SqliteDatabase, Model, AutoField, CharField, ForeignKeyField
 db = SqliteDatabase('db1.db')#, pragmas={'foreign_keys': 1})
 
 
-class Author(Model):
+class Genre(Model):
     id = AutoField(primary_key=True, unique=True)
-    name = CharField(max_length=50, unique=True)
+    name = CharField(max_length=50, unique=True);
 
     class Meta():
         database = db
 
 
-class Genre(Model):
+class Author(Model):
     id = AutoField(primary_key=True, unique=True)
-    name = CharField(max_length=50, unique=True);
+    name = CharField(max_length=50, unique=True)
 
     class Meta():
         database = db

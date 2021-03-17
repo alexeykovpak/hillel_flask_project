@@ -69,19 +69,6 @@ def create_genre():
     return render_template('create_genre.html', form=form)
 
 
-@app.route('/create/book/', methods=['GET', 'POST'])
-def create_book():
-
-    form = BookForm()
-    if request.method == 'POST':
-        form = BookForm(formdata=request.form)
-        if form.validate():
-            form.save()
-            flash('The book was successfully added')
-            return redirect('/')
-    return render_template('create_book.html', form=form)
-
-
 @app.route('/update/book/<int:book_id>/', methods=['GET', 'POST'])
 def update_book(book_id):
 
@@ -103,6 +90,19 @@ def update_book(book_id):
     except DoesNotExist:
         return abort(404)
     return render_template('change_book.html', form=form, book=book)
+
+
+@app.route('/create/book/', methods=['GET', 'POST'])
+def create_book():
+
+    form = BookForm()
+    if request.method == 'POST':
+        form = BookForm(formdata=request.form)
+        if form.validate():
+            form.save()
+            flash('The book was successfully added')
+            return redirect('/')
+    return render_template('create_book.html', form=form)
 
 
 if __name__ == '__main__':
