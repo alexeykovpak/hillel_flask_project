@@ -5,7 +5,7 @@ from forms import BookForm, AuthorForm, GenreForm
 
 
 app = Flask(__name__)
-app.secret_key = b'_7#r2M"d6dZf\n\xec]/'
+# Here was my secret key
 
 
 @app.route('/')
@@ -45,9 +45,9 @@ def create_author():
             try:
                 form.save()
             except IntegrityError:
-                flash('The author already exists')
+                flash('The author already exists') # Doesn't work without secret key
                 return redirect('/create/author/')
-            flash('The author was successefully added')
+            flash('The author was successefully added') # Doesn't work without secret key
             return redirect('/')
     return render_template('create_author.html', form=form)
 
@@ -62,9 +62,9 @@ def create_genre():
             try:
                 form.save()
             except IntegrityError:
-                flash('The genre already exists')
+                flash('The genre already exists') # Doesn't work without secret key
                 return redirect('/create/genre/')
-            flash('The genre was successefully added')
+            flash('The genre was successefully added') # Doesn't work without secret key
             return redirect('/')
     return render_template('create_genre.html', form=form)
 
@@ -83,13 +83,13 @@ def update_book(book_id):
             book.genre = form.genre.data
             book.year = form.year.data
             book.save()
-            flash('The book was successfully updated')
+            flash('The book was successfully updated') # Doesn't work without secret key
             return redirect('/') 
     try:
         updating_book = Book.get(Book.id == book_id)
     except DoesNotExist:
         return abort(404)
-    return render_template('change_book.html', form=form, book=book)
+    return render_template('update_book.html', form=form, book=book)
 
 
 @app.route('/create/book/', methods=['GET', 'POST'])
@@ -100,7 +100,7 @@ def create_book():
         form = BookForm(formdata=request.form)
         if form.validate():
             form.save()
-            flash('The book was successfully added')
+            flash('The book was successfully added') # Doesn't work without secret key
             return redirect('/')
     return render_template('create_book.html', form=form)
 

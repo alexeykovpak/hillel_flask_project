@@ -15,13 +15,6 @@ class BookForm(wtforms.Form):
         year=self.year.data)
 
 
-class GenreForm(wtforms.Form):
-    name = wtforms.StringField(validators=[wtforms.validators.InputRequired(message="You didn't entered any data")], description="Enter a new genre name:")
-
-    def save(self):
-        Genre.create(name=self.name.data)
-
-
 class AuthorForm(wtforms.Form):
     name = wtforms.StringField(validators=[wtforms.validators.InputRequired(message="You didn't entered any data")], description="Enter a new author's name:")
 
@@ -29,5 +22,9 @@ class AuthorForm(wtforms.Form):
         Author.create(name=self.name.data)
 
 
+class GenreForm(wtforms.Form):
+    name = wtforms.StringField(validators=[wtforms.validators.InputRequired(message="You didn't entered any data")], description="Enter a new genre name:")
 
+    def save(self):
+        Genre.create(name=self.name.data)
 
