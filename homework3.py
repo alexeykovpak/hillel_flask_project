@@ -1,5 +1,6 @@
 import sqlite3
 from flask import Flask, render_template, request, redirect
+from models import BookModel, AuthorModel, GenreModel
 
 
 app = Flask(__name__)
@@ -34,7 +35,7 @@ def all_books():
 def books_by_genre(genre_pk):
 # Returns the list of all the books with the defined genre
 
-    books = execute_query('SELECT * FROM Book WHERE genre="{}"'.format(genre_pk))
+    books = execute_query(f'SELECT * FROM Book WHERE genre="{genre_pk}"')
     return render_template('index.html', books=books, get_by_id=get_by_id)
 
 
@@ -51,9 +52,8 @@ def create_author():
 # Adds a new author into the database of the library
 
     if request.method == 'POST':
-        execute_query(
-            'INSERT INTO Author (name) VALUES ("{}")'.format(request.form['name'])
-        )
+        execute_query(f'''INSERT INTO Author (name)
+        VALUES ("{request.form['name']}")''')
         return redirect('/')
     return render_template('create_author.html')
 
@@ -64,7 +64,7 @@ def create_genre():
 
     if request.method == 'POST':
         execute_query(
-            'INSERT INTO Genre (name) VALUES ("{}")'.format(request.form['name'])
+            f'''INSERT INTO Genre (name) VALUES ("{request.form['name']}")'''
         )
         return redirect('/')
     return render_template('create_genre.html')
@@ -75,20 +75,18 @@ def create_book():
 # Adds a new book record into the database of the library
 
     if request.method == 'POST':
-        genre_id = execute_query('SELECT id FROM Genre WHERE name="{}"'.format(request.form['genre']))
+        genre_id = execute_query(f'''SELECT id FROM Genre WHERE name="{request.form['genre']}"''')
         if not genre_id:
-            execute_query('INSERT INTO Genre (name) VALUES ("{}")'.format(request.form['genre']))
-            genre_id = execute_query('SELECT id FROM Genre WHERE name="{}"'.format(
-                request.form['genre']))
-        author_id = execute_query('SELECT id FROM Author WHERE name="{}"'.format(
-            request.form['author']))
+            execute_query(f'''INSERT INTO Genre (name) VALUES ("{request.form['genre']}")''')
+            genre_id = execute_query(f'''SELECT id FROM Genre WHERE name="{request.form['genre']}"''')
+        author_id = execute_query(f'''SELECT id FROM Author WHERE name="{request.form['author']}"''')
         if not author_id:
-            execute_query('INSERT INTO Author (name) VALUES ("{}")'.format(request.form['author']))
-            author_id = execute_query('SELECT id FROM Author WHERE name="{}"'.format(
-                request.form['author']))
+            execute_query(f'''INSERT INTO Author (name) VALUES ("{request.form['author']}")''')
+            author_id = execute_query(f'''SELECT id FROM Author WHERE name="{request.form['author']}"''')
         execute_query(
-            'INSERT INTO Book (name, author, genre, year) VALUES ("{}", "{}", "{}", "{}")'.format(
-            request.form['name'], author_id[0][0], genre_id[0][0], request.form['year'])
+            f'''INSERT INTO Book (name, author, genre, year)
+            VALUES ("{request.form['name']}", "{author_id[0][0]}", "{genre_id[0][0]}",
+            "{request.form['year']}")'''
         )
         return redirect('/')
     return render_template('create_book.html')
@@ -99,53 +97,19 @@ def update_book(book_id):
 # Updates values for the book with defined id
 
     if request.method == 'POST':
-        genre_id = execute_query('SELECT id FROM Genre WHERE name="{}"'.format(request.form['genre']))
+        genre_id = execute_query(f'''SELECT id FROM Genre WHERE name="{request.form['genre']}"''')
         if not genre_id:
-            execute_query('INSERT INTO Genre (name) VALUES ("{}")'.format(request.form['genre']))
-            genre_id = execute_query('SELECT id FROM Genre WHERE name="{}"'.format(
-                request.form['genre']))
-        author_id = execute_query('SELECT id FROM Author WHERE name="{}"'.format(
-            request.form['author']))
+            execute_query(f'''INSERT INTO Genre (name) VALUES ("{request.form['genre']}")''')
+            genre_id = execute_query(f'''SELECT id FROM Genre WHERE name="{request.form['genre']}"''')
+        author_id = execute_query(f'''SELECT id FROM Author WHERE name="{request.form['author']}"''')
         if not author_id:
-            execute_query('INSERT INTO Author (name) VALUES ("{}")'.format(request.form['author']))
-            author_id = execute_query('SELECT id FROM Author WHERE name="{}"'.format(
-                request.form['author']))
-        execute_query('''UPDATE Book SET name="{}", author="{}", genre="{}", year="{}"
-            WHERE id={};'''.format(request.form['name'], author_id[0][0],
-            genre_id[0][0], request.form['year'], book_id))
+            execute_query(f'''INSERT INTO Author (name) VALUES ("{request.form['author']}")''')
+            author_id = execute_query(f'''SELECT id FROM Author WHERE name="{request.form['author']}"''')
+        execute_query(f'''UPDATE Book SET name="{request.form['name']}", author="{author_id[0][0]}",
+        genre="{genre_id[0][0]}", year="{request.form['year']}" WHERE id={book_id};''')
         return redirect('/')
-    book = execute_query('SELECT * FROM Book WHERE Book.id={}'.format(book_id))
+    book = execute_query(f'SELECT * FROM Book WHERE Book.id={book_id}')
     return render_template('change_book.html', book=book[0], get_by_id=get_by_id)
-
-
-@app.route('/create/tables/')
-def create_tables():
-# Creating Book, Genre and Author tables without SQLAlchemy application
-
-    execute_query('PRAGMA foreign_keys=on;')
-    execute_query('''
-        CREATE TABLE Book(
-        id INTEGER PRIMARY KEY NOT NULL,
-        name TEXT NOT NULL,
-        author INTEGER NOT NULL,
-        genre INTEGER NOT NULL,
-        year INTEGER NOT NULL,
-        FOREIGN KEY(author) REFERENCES Author(id),
-        FOREIGN KEY(genre) REFERENCES Genre(id));
-        ''')
-    execute_query('''
-        CREATE TABLE Author(
-        id INTEGER PRIMARY KEY NOT NULL,
-        name TEXT UNIQUE NOT NULL);
-        ''')
-    execute_query('''
-        CREATE TABLE Genre(
-        id INTEGER PRIMARY KEY NOT NULL,
-        name TEXT
-        UNIQUE NOT NULL);
-        ''')
-    return redirect('/')
-
 
 
 if __name__ == '__main__':
@@ -153,3 +117,4 @@ if __name__ == '__main__':
         port=5000,
         debug=True,
     )
+

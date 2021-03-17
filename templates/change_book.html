@@ -2,29 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Updates the record at Book table in db.db file</title>
+    <title>Update book</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <p>
                 <form method="post">
                     <div class="form-group">
-                        <label for="name">Enter a new title:</label>
-                        <input type="text" class="form-control" name="name" id="name" value="{{book[1]}}">
-                        {% with author=get_by_id('Author', book[2]) %}
-                            <label for="author">Enter a new author's name:</label>
-                            <input type="text" class="form-control" name="author" id="author"
-                            value="{{ author[1] }}">
-                        {% endwith %}
-                        {% with genre=get_by_id('Genre', book[3]) %}
-                            <label for="genre">Enter a new genre:</label>
-                            <input type="text" class="form-control" name="genre" id="genre"
-                            value="{{ genre[1] }}">
-                        {% endwith %}
-                        <label for="year">Enter a year of publishing:</label>
-                        <input type="text" class="form-control" name="year" id="year" value="{{book[4]}}">
+                        {% if form.name.errors %}
+                            {{ form.name.errors }}
+                        {% endif %}
+                        <label for="{{ form.name.name }}">{{ form.name.description }} <b>«{{ book.name }}»</b>, new one:</label>
+                        {{ form.name (size=74)}}
+                        <p><p>
+                        {% if form.author.errors %}
+                            {{ form.author.errors }}
+                        {% endif %}
+                        <label for="{{ form.author.name }}">{{ form.author.description }}</label>
+                        {{ form.author }}
+                        <p>  
+                        {% if form.genre.errors %}
+                            {{ form.genre.errors }}
+                        {% endif %}
+                        <label for="{{ form.genre.name }}">{{ form.genre.description }}</label>
+                        {{ form.genre }}
+                        <p>  
+                        {% if form.year.errors %}
+                            {{ form.year.errors }}
+                        {% endif %}
+                        <label for="{{ form.year.name }}">{{ form.year.description }}</label>
+                        {{ form.year (size=59)}}  
                     </div>
                     <input style="width: 100%" class="btn btn-primary" type="submit" value="Change values">
                 </form>
@@ -33,3 +44,4 @@
     </div>
 </body>
 </html>
+
