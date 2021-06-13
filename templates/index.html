@@ -2,8 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>The list of books in our library, all or selected by author (or by genre) ID</title>
+    <title>List of books</title>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='book_favicon.ico') }}">
 </head>
 <body>
     <div class="container">
@@ -20,19 +30,11 @@
                     </tr>
                     {% for book in books %}
                     <tr>
-                        <th>{{ book[0] }}</th>
-                        <th>{{ book[1] }}</th>
-                        <th>
-                            {% with author=get_by_id('Author', book[2]) %}
-                                {{ author[1] }}
-                            {% endwith %}
-                        </th>
-                        <th>
-                             {% with genre=get_by_id('Genre', book[3] )%}
-                                 {{ genre[1] }}
-                             {% endwith %}
-                        </th>
-                        <th>{{ book[4] }}</th>
+                        <th>{{ book.id }}</th>
+                        <th>«{{ book.name }}»</th>
+                        <th>{{ book.author.name }}</th>
+                        <th>{{ book.genre.name }}</th>
+                        <th>{{ book.year }}</th>
                     </tr>
                     {% endfor %}
                 </table>

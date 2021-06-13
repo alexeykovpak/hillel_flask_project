@@ -1,11 +1,11 @@
-def parse(query):
+def parse(query: str) -> dict:
 
     # Searches name and color values in the input string and returns a dictionary with those values or an empty dictionary
 
     from re import search
 
     result = dict()
-
+    #print('Test print')#
     name_substring = search(r'name=.+', query)
     if name_substring:
         name = name_substring.group(0)[5:]
@@ -24,12 +24,16 @@ def parse(query):
 
     return result
 
-
-if __name__ == '__main__':
+def main():
     assert parse('https://example.com/path/to/page?name=ferret&color=purple') == {'name': 'ferret', 'color': 'purple'}
     assert parse('https://example.com/path/to/page?name=ferret&color=purple&') == {'name': 'ferret', 'color': 'purple'}
     assert parse('http://example.com/') == {}
     assert parse('http://example.com/?') == {}
     assert parse('http://example.com/?name=Dima') == {'name': 'Dima'}
+       
 
-# SSH key added
+
+if __name__ == '__main__':
+    main()    
+
+

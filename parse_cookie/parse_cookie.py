@@ -1,4 +1,4 @@
-def parse_cookie(query):
+def parse_cookie(query: str) -> dict:
     # Returns a dictionary with keys 'name' and 'age' in the case if the input string contains such values, or an empty dictionary otherwise
     
     from re import search
@@ -16,10 +16,13 @@ def parse_cookie(query):
         
     return result
 
-
-if __name__ == '__main__':
+def main():
     assert parse_cookie('name=Dima;') == {'name': 'Dima'}
     assert parse_cookie('') == {}
     assert parse_cookie('name=Dima;age=28;') == {'name': 'Dima', 'age': '28'}
     assert parse_cookie('name=Dima=User;age=28;') == {'name': 'Dima=User', 'age': '28'}
+
+if __name__ == '__main__':
+    main()
+
 
